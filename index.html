@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="af">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loading...</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%);
+      font-family: Arial, sans-serif;
+    }
+    #loader-container {
+      background: white; padding: 2rem;
+      border-radius: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      text-align: center; width: 90%; max-width: 400px;
+    }
+    #loading-text { font-size: 1.5rem; color: #333; margin-bottom: 1rem; }
+    #progress-bar {
+      width: 100%; height: 1rem; background: #eee;
+      border-radius: 0.5rem; overflow: hidden;
+    }
+    #progress {
+      width: 0%; height: 100%; background: #FF69B4;
+      transition: width 0.1s linear;
+    }
+    #progress-text { margin-top: 0.5rem; font-size: 1rem; color: #333; }
+  </style>
+</head>
+<body>
+  <div id="loader-container">
+    <div id="loading-text">Loading...</div>
+    <div id="progress-bar"><div id="progress"></div></div>
+    <div id="progress-text">0%</div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const bar  = document.getElementById('progress');
+      const text = document.getElementById('progress-text');
+      let pct = 0;
+      const timer = setInterval(() => {
+        pct++;
+        if (pct > 100) {
+          clearInterval(timer);
+          window.location.href = 'landing.html';
+        } else {
+          bar.style.width = pct + '%';
+          text.textContent = pct + '%';
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>
