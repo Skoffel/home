@@ -1,19 +1,10 @@
+<!DOCTYPE html>
 <html lang="af">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Wil jy my meisie wees?</title>
   <link rel="stylesheet" href="styles.css">
-  <style>
-    html, body { margin:0; padding:0; height:100%; }
-    main {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-  </style>
 </head>
 <body>
   <main>
@@ -24,31 +15,44 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const btn = document.getElementById('runaway-btn');
-      const { width: bw, height: bh } = btn.getBoundingClientRect();
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      const margin = 20;
-
-      // distance from center to each edge, leaving a 20px buffer
-      const offsetX = (vw - bw) / 2 - margin;
-      const offsetY = (vh - bh) / 2 - margin;
-
-      const corners = [
-        { x: -offsetX, y: -offsetY },  // top‑left
-        { x:  offsetX, y: -offsetY },  // top‑right
-        { x: -offsetX, y:  offsetY }   // bottom‑left
-      ];
-
+      const margin = 20;     // px from each edge
       let step = 0;
-      btn.addEventListener('click', e => {
-        if (step < corners.length) {
+
+      btn.addEventListener('click', function(e) {
+        if (step < 3) {
           e.preventDefault();
-          const { x, y } = corners[step++];
-          btn.style.transform = `translate(${x}px, ${y}px)`;
-        } else {
-          btn.style.transform = '';  // reset to center
-          // no preventDefault → link fires on this click
+
+          // On first tap, snap it out of the flex layout into absolute
+          if (step === 0) {
+            const rect = btn.getBoundingClientRect();
+            btn.style.position = 'absolute';
+            btn.style.left = rect.left + 'px';
+            btn.style.top  = rect.top  + 'px';
+            // remove any transform from previous code
+            btn.style.transform = '';
+          }
+
+          // Re‑calculate viewport & button dims each time
+          const vw = window.innerWidth;
+          const vh = window.innerHeight;
+          const bw = btn.offsetWidth;
+          const bh = btn.offsetHeight;
+
+          // three safe corner positions
+          const corners = [
+            { left: margin,           top: margin            },  // top-left
+            { left: vw - bw - margin, top: margin            },  // top-right
+            { left: margin,           top: vh - bh - margin  }   // bottom-left
+          ];
+
+          // move to next corner
+          const { left, top } = corners[step];
+          btn.style.left = left + 'px';
+          btn.style.top  = top  + 'px';
+          step++;
+
         }
+        // on the 4th tap (step === 3) we don't preventDefault(), so the link fires
       });
     });
   </script>
