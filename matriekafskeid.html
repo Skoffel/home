@@ -9,7 +9,29 @@
 <body>
   <main>
     <h1>Wil jy met my matriekafskeid toe gaan?</h1>
-    <a href="final.html" class="btn">Ja</a>
+    <a id="yes-btn" href="final.html" class="btn">Ja</a>
+    <span id="ja-counter" style="margin-left:0.5rem; display:none;">0 / 20</span>
   </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('yes-btn');
+      const counter = document.getElementById('ja-counter');
+      let count = 0;
+
+      btn.addEventListener('click', e => {
+        e.preventDefault();          // always block default
+        count++;
+        if (count === 1) {
+          counter.style.display = 'inline';
+        }
+        counter.textContent = `${count} / 20`;
+        if (count >= 20) {
+          // once she’s said “ja” 20 times, send her on
+          window.location.href = btn.href;
+        }
+      });
+    });
+  </script>
 </body>
 </html>
