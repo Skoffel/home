@@ -1,10 +1,24 @@
-<!DOCTYPE html>
 <html lang="af">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Wil jy my meisie wees?</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* make sure the container fills the screen */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      position: relative;
+    }
+  </style>
 </head>
 <body>
   <main>
@@ -15,23 +29,32 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const btn = document.getElementById('runaway-btn');
-      // three corner offsets: top-left, top-right, bottom-left
-      const corners = [
-        { x: -240, y: -240 },
-        { x:  240, y: -240 },
-        { x: -240, y:  240 }
-      ];
-      let step = 0;
 
+      // Measure button & viewport once
+      const { width: bw, height: bh } = btn.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      // Calculate how far from center to edge, minus a small margin
+      const offsetX = (vw - bw) / 2 - 20;
+      const offsetY = (vh - bh) / 2 - 20;
+
+      // Three corner positions relative to center
+      const corners = [
+        { x: -offsetX, y: -offsetY },  // top‑left
+        { x:  offsetX, y: -offsetY },  // top‑right
+        { x: -offsetX, y:  offsetY }   // bottom‑left
+      ];
+
+      let step = 0;
       btn.addEventListener('click', e => {
         if (step < corners.length) {
-          e.preventDefault();
-          const { x, y } = corners[step];
+          e.preventDefault();                  // stop navigation
+          const { x, y } = corners[step++];
           btn.style.transform = `translate(${x}px, ${y}px)`;
-          step++;
         } else {
-          // on the 4th click, let the link fire
-          btn.style.transform = '';
+          btn.style.transform = '';            // reset to center
+          // no preventDefault → link works on this click
         }
       });
     });
