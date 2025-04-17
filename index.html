@@ -9,7 +9,30 @@
 <body>
   <main>
     <h1>Wil jy my meisie wees?</h1>
-    <a href="matriekafskeid.html" class="btn">Ja</a>
+    <a id="runaway-btn" href="matriekafskeid.html" class="btn">Ja</a>
   </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('runaway-btn');
+      let tries = 0;
+
+      function runaway() {
+        if (tries < 3) {
+          // pick a random jump within ±80px
+          const dx = (Math.random() * 160) - 80;
+          const dy = (Math.random() * 160) - 80;
+          btn.style.transform = `translate(${dx}px, ${dy}px)`;
+          tries++;
+        } else {
+          // after 3 jumps, stop dodging
+          btn.removeEventListener('mouseover', runaway);
+          btn.style.transform = '';
+        }
+      }
+
+      btn.addEventListener('mouseover', runaway);
+    });
+  </script>
 </body>
 </html>
