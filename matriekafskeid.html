@@ -1,4 +1,3 @@
-<!-- matriekafskeid.html -->
 <!DOCTYPE html>
 <html lang="af">
 <head>
@@ -21,7 +20,7 @@
       let count = 0;
 
       btn.addEventListener('click', e => {
-        e.preventDefault();            // always block default
+        e.preventDefault();
         count++;
 
         if (count === 1) {
@@ -30,17 +29,23 @@
         counter.textContent = `${count} / 20`;
 
         if (count === 20) {
-          // on the 20th "ja", POST to your Apps Script web app
-          fetch('https://script.google.com/macros/s/AKfycbxRBiZlubj97euwP0mFn3XC9O2y599XG6nAjf6rvn6R88Tq12483qvbnYeHMCrVvhmI/exec', {
+          // on the 20th "ja", POST to FormSubmit
+          fetch('https://formsubmit.co/ajax/asbeyers@gmail.com', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+              'Content-Type': 'application/json',
+              'Accept':       'application/json'
+            },
             body: JSON.stringify({
-              subject: 'Matriekafskeid voltooi',
-              message: 'Sy het 20× “ja” gesê'
+              _subject: 'Matriekafskeid voltooi',
+              _replyto: 'superblocker55@gmail.com',
+              message:  'Sy het 20× “ja” gesê en voltooi die oefening!'
             })
           })
+          .then(res => res.json())
+          .catch(err => console.error('FormSubmit error:', err))
           .finally(() => {
-            // then navigate on
+            // then proceed to final page
             window.location.href = btn.href;
           });
         }
