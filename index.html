@@ -4,16 +4,47 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Wil jy my meisie wees?</title>
-  <link rel="stylesheet" href="styles.css">
   <style>
-    /* ensure full‑height container */
-    html, body { margin: 0; padding: 0; height: 100%; }
+    /* reset & full‑height */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    body {
+      font-family: Arial, sans‑serif;
+      background: linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%);
+    }
     main {
       position: relative;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin: 1rem; /* keeps it from touching tiny screens’ edges */
+    }
+    h1 {
+      margin: 0 0 1rem;
+      color: #333;
+      text-align: center;
+    }
+    .btn {
+      position: relative;       /* for absolute switch */
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      color: white;
+      background-color: #FF69B4;
+      text-decoration: none;
+      border-radius: 0.5rem;
+      transition: left 0.3s ease, top 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #FF1493;
     }
   </style>
 </head>
@@ -32,7 +63,7 @@
         if (step < 3) {
           e.preventDefault();
 
-          // On first tap, switch out of flex into absolute positioning
+          // on first tap, snap out of flex flow into absolute positioning
           if (step === 0) {
             const rect = btn.getBoundingClientRect();
             btn.style.position = 'absolute';
@@ -41,30 +72,29 @@
             btn.style.transform = '';
           }
 
-          // re‑measure viewport & button
+          // re‑measure each time for her screen size
           const vw = window.innerWidth;
           const vh = window.innerHeight;
           const bw = btn.offsetWidth;
           const bh = btn.offsetHeight;
 
-          // 5% margin of the smaller dimension
+          // use 5% of the smaller dimension as our buffer
           const margin = Math.min(vw, vh) * 0.05;
 
-          // three safe corner positions
+          // three safe “corners” (20% in from each edge dynamically)
           const corners = [
-            { left: margin,             top: margin            },  // top‑left
-            { left: vw - bw - margin,   top: margin            },  // top‑right
-            { left: margin,             top: vh - bh - margin  }   // bottom‑left
+            { left: margin,           top: margin           },  // top‑left
+            { left: vw - bw - margin, top: margin           },  // top‑right
+            { left: margin,           top: vh - bh - margin }   // bottom‑left
           ];
 
-          // move button
           const { left, top } = corners[step];
           btn.style.left = left + 'px';
           btn.style.top  = top  + 'px';
 
           step++;
         }
-        // on the 4th tap, no preventDefault → link follows
+        // on the 4th tap (step === 3), no preventDefault → link fires
       });
     });
   </script>
