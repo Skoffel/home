@@ -6,14 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mat​​riekafskeid</title>
   <link rel="stylesheet" href="styles.css">
-  <!-- EmailJS SDK -->
-  <script src="https://cdn.emailjs.com/sdk/2.3.2/email.min.js"></script>
-  <script>
-    // ← Replace with your own EmailJS user ID
-    (function(){
-      emailjs.init('szKMNg_dSLZ5jLhxV');
-    })();
-  </script>
 </head>
 <body>
   <main>
@@ -38,21 +30,17 @@
         counter.textContent = `${count} / 20`;
 
         if (count === 20) {
-          // on the 20th "ja", send email then redirect
-          emailjs.send(
-            'service_6e2ooka',          // ← your EmailJS service ID
-            'template_xegxvob',         // ← your EmailJS template ID
-            {
-              name: 'Andires',
-              email:    'asbeyers@gmail.com',
-              title:     'Matriekafskeid voltooi',
-              message:     'The eagle has landed'
-            }
-          ).then(() => {
-            window.location.href = btn.href;
-          }).catch(err => {
-            console.error('EmailJS fout:', err);
-            // even as daar ’n fout is, stuur haar verder:
+          // on the 20th "ja", POST to your Apps Script web app
+          fetch('https://script.google.com/macros/s/AKfycbyzu-3Pb4wYF47pElSXKq8biG5mo-wkaxYemQ7bzdcheBoSaN8wteZqyoJyfpDFtxoX/exec', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              subject: 'Matriekafskeid voltooi',
+              message: 'Sy het 20× “ja” gesê'
+            })
+          })
+          .finally(() => {
+            // then navigate on
             window.location.href = btn.href;
           });
         }
