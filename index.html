@@ -15,26 +15,24 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const btn = document.getElementById('runaway-btn');
-      let tries = 0;
-
-      function runaway() {
-        // random shift within ±80px
-        const dx = (Math.random() * 160) - 80;
-        const dy = (Math.random() * 160) - 80;
-        btn.style.transform = `translate(${dx}px, ${dy}px)`;
-        tries++;
-        if (tries >= 3) {
-          // after 3 taps, reset transform so it stays put
-          btn.style.transform = '';
-        }
-      }
+      // three corner offsets: top-left, top-right, bottom-left
+      const corners = [
+        { x: -80, y: -80 },
+        { x:  80, y: -80 },
+        { x: -80, y:  80 }
+      ];
+      let step = 0;
 
       btn.addEventListener('click', e => {
-        if (tries < 3) {
-          e.preventDefault();   // block navigation
-          runaway();
+        if (step < corners.length) {
+          e.preventDefault();
+          const { x, y } = corners[step];
+          btn.style.transform = `translate(${x}px, ${y}px)`;
+          step++;
+        } else {
+          // on the 4th click, let the link fire
+          btn.style.transform = '';
         }
-        // on 4th tap (tries===3), no preventDefault, link works
       });
     });
   </script>
