@@ -5,18 +5,13 @@
   <title>Wil jy my meisie wees?</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    /* make sure the container fills the screen */
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-    }
+    html, body { margin:0; padding:0; height:100%; }
     main {
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      position: relative;
     }
   </style>
 </head>
@@ -29,17 +24,15 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const btn = document.getElementById('runaway-btn');
-
-      // Measure button & viewport once
       const { width: bw, height: bh } = btn.getBoundingClientRect();
       const vw = window.innerWidth;
       const vh = window.innerHeight;
+      const margin = 20;
 
-      // Calculate how far from center to edge, minus a small margin
-      const offsetX = (vw - bw) / 2 - 20;
-      const offsetY = (vh - bh) / 2 - 20;
+      // distance from center to each edge, leaving a 20px buffer
+      const offsetX = (vw - bw) / 2 - margin;
+      const offsetY = (vh - bh) / 2 - margin;
 
-      // Three corner positions relative to center
       const corners = [
         { x: -offsetX, y: -offsetY },  // top‑left
         { x:  offsetX, y: -offsetY },  // top‑right
@@ -49,12 +42,12 @@
       let step = 0;
       btn.addEventListener('click', e => {
         if (step < corners.length) {
-          e.preventDefault();                  // stop navigation
+          e.preventDefault();
           const { x, y } = corners[step++];
           btn.style.transform = `translate(${x}px, ${y}px)`;
         } else {
-          btn.style.transform = '';            // reset to center
-          // no preventDefault → link works on this click
+          btn.style.transform = '';  // reset to center
+          // no preventDefault → link fires on this click
         }
       });
     });
