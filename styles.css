@@ -33,6 +33,7 @@ h1 {
   border-radius: 0.5rem;
   position : relative;
   transition: transform 0.3s ease;
+  transform-origin: 0 0;
 }
 
 .btn:hover {
