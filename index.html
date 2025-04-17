@@ -18,20 +18,24 @@
       let tries = 0;
 
       function runaway() {
-        if (tries < 3) {
-          // pick a random jump within ±80px
-          const dx = (Math.random() * 160) - 80;
-          const dy = (Math.random() * 160) - 80;
-          btn.style.transform = `translate(${dx}px, ${dy}px)`;
-          tries++;
-        } else {
-          // after 3 jumps, stop dodging
-          btn.removeEventListener('mouseover', runaway);
+        // random shift within ±80px
+        const dx = (Math.random() * 160) - 80;
+        const dy = (Math.random() * 160) - 80;
+        btn.style.transform = `translate(${dx}px, ${dy}px)`;
+        tries++;
+        if (tries >= 3) {
+          // after 3 taps, reset transform so it stays put
           btn.style.transform = '';
         }
       }
 
-      btn.addEventListener('mouseover', runaway);
+      btn.addEventListener('click', e => {
+        if (tries < 3) {
+          e.preventDefault();   // block navigation
+          runaway();
+        }
+        // on 4th tap (tries===3), no preventDefault, link works
+      });
     });
   </script>
 </body>
