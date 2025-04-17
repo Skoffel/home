@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Wil jy my meisie wees?</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ensure full‑height container */
+    html, body { margin: 0; padding: 0; height: 100%; }
+    main {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+  </style>
 </head>
 <body>
   <main>
@@ -15,44 +26,45 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const btn = document.getElementById('runaway-btn');
-      const margin = 20;     // px from each edge
       let step = 0;
 
       btn.addEventListener('click', function(e) {
         if (step < 3) {
           e.preventDefault();
 
-          // On first tap, snap it out of the flex layout into absolute
+          // On first tap, switch out of flex into absolute positioning
           if (step === 0) {
             const rect = btn.getBoundingClientRect();
             btn.style.position = 'absolute';
-            btn.style.left = rect.left + 'px';
-            btn.style.top  = rect.top  + 'px';
-            // remove any transform from previous code
+            btn.style.left     = rect.left + 'px';
+            btn.style.top      = rect.top  + 'px';
             btn.style.transform = '';
           }
 
-          // Re‑calculate viewport & button dims each time
+          // re‑measure viewport & button
           const vw = window.innerWidth;
           const vh = window.innerHeight;
           const bw = btn.offsetWidth;
           const bh = btn.offsetHeight;
 
+          // 5% margin of the smaller dimension
+          const margin = Math.min(vw, vh) * 0.05;
+
           // three safe corner positions
           const corners = [
-            { left: margin,           top: margin            },  // top-left
-            { left: vw - bw - margin, top: margin            },  // top-right
-            { left: margin,           top: vh - bh - margin  }   // bottom-left
+            { left: margin,             top: margin            },  // top‑left
+            { left: vw - bw - margin,   top: margin            },  // top‑right
+            { left: margin,             top: vh - bh - margin  }   // bottom‑left
           ];
 
-          // move to next corner
+          // move button
           const { left, top } = corners[step];
           btn.style.left = left + 'px';
           btn.style.top  = top  + 'px';
-          step++;
 
+          step++;
         }
-        // on the 4th tap (step === 3) we don't preventDefault(), so the link fires
+        // on the 4th tap, no preventDefault → link follows
       });
     });
   </script>
