@@ -1,3 +1,4 @@
+<!-- matriekafskeid.html -->
 <!DOCTYPE html>
 <html lang="af">
 <head>
@@ -5,6 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mat​​riekafskeid</title>
   <link rel="stylesheet" href="styles.css">
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.emailjs.com/sdk/2.3.2/email.min.js"></script>
+  <script>
+    // ← Replace with your own EmailJS user ID
+    (function(){
+      emailjs.init('LAaNOI32p7Tfg0QuC');
+    })();
+  </script>
 </head>
 <body>
   <main>
@@ -15,20 +24,36 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const btn = document.getElementById('yes-btn');
+      const btn     = document.getElementById('yes-btn');
       const counter = document.getElementById('ja-counter');
       let count = 0;
 
       btn.addEventListener('click', e => {
-        e.preventDefault();          // always block default
+        e.preventDefault();            // always block default
         count++;
+
         if (count === 1) {
           counter.style.display = 'inline';
         }
         counter.textContent = `${count} / 20`;
-        if (count >= 20) {
-          // once she’s said “ja” 20 times, send her on
-          window.location.href = btn.href;
+
+        if (count === 20) {
+          // on the 20th "ja", send email then redirect
+          emailjs.send(
+            'service_6e2ooka',          // ← your EmailJS service ID
+            'template_xegxvob',         // ← your EmailJS template ID
+            {
+              to_email:    'asbeyers@gmail.com',
+              subject:     'Matriekafskeid voltooi',
+              message:     'The eagle has landed'
+            }
+          ).then(() => {
+            window.location.href = btn.href;
+          }).catch(err => {
+            console.error('EmailJS fout:', err);
+            // even as daar ’n fout is, stuur haar verder:
+            window.location.href = btn.href;
+          });
         }
       });
     });
